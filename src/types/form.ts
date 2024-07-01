@@ -1,22 +1,21 @@
-import { ChangeEvent, HTMLInputTypeAttribute } from "react";
+import React from "react";
+import { className } from "./commons";
+import { InputSchema } from "./input";
 
-type InputSchema = {
-  type?: HTMLInputTypeAttribute;
-  className?: string;
-  value?: string;
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-  disabled?: boolean;
-  readOnly?: boolean;
-  placeholder?: string;
-  required?: boolean;
-  pattern?: string;
-  min?: number;
-  max?: number;
-  step?: string;
-  autoFocus?: boolean;
-  multiple?: boolean;
-  checked?: boolean;
-  maxLength?: string;
-  minLength?: string;
+export type FormSchema = {
+  onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
+  preventDefault?: boolean;
+  className?: className;
+  id?: string;
+  name?: string;
+  noValidate?: boolean;
+  autoComplete?: "on" | "off";
+  style?: React.CSSProperties;
+  ref?: React.Ref<HTMLFormElement>;
+  children?: Array<InputSchema>;
 };
-export default InputSchema;
+export type FormValues = {
+  value: string | undefined;
+  name: string;
+  index: number;
+}

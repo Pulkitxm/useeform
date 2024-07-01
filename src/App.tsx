@@ -1,10 +1,12 @@
 import useForm from "./hooks/useForm";
+import "./App.css";
+import Options from "./Options";
+import { useEffect } from "react";
 
 export default function App() {
-  const { form, errors, formUI } = useForm({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const { errors, formUI } = useForm(Options);
+  useEffect(() => {
+    errors.length && console.log(errors);
+  }, [errors]);
   return <>{formUI}</>;
 }
