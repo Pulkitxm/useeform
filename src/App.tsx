@@ -1,3 +1,10 @@
+import useForm from "./hooks/useForm";
+
 export default function App() {
-  return <div>App</div>;
+  const { form, errors, formUI } = useForm({
+    name: "",
+    email: "",
+    password: "",
+  });
+  return <>{formUI}</>;
 }
