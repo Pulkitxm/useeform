@@ -19,14 +19,15 @@ export default function TextInput({
     step,
     checked,
     onChange,
+    name,
   },
   addError,
 }: {
   props: InputSchema;
-  addError: (error: string) => void;
+  addError: (error: string, name: string) => void;
 }) {
   if (type !== "text") {
-    addError("TextInput only supports type: text");
+    addError("TextInput only supports type: text", name);
   }
   if (max && min) {
     addError(
@@ -34,14 +35,15 @@ export default function TextInput({
         ? minLength
           ? "max and min"
           : "max"
-        : "min"
+        : "min",
+      name
     );
   }
   if (value && maxLength && value.length > maxLength) {
-    addError("TextInput value is longer than maxLength");
+    addError("TextInput value is longer than maxLength", name);
   }
   if (value && minLength && value.length < minLength) {
-    addError("TextInput value is longer than maxLength");
+    addError("TextInput value is longer than maxLength", name);
   }
   return (
     <input

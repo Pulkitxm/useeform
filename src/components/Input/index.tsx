@@ -7,7 +7,7 @@ export default function Input({
   addError,
 }: {
   props: InputSchema;
-  addError: (error: string) => void;
+  addError: (error: string, name: string) => void;
 }): JSX.Element {
   if (props.type === "text")
     return <TextInput props={props} addError={addError} />;

@@ -18,4 +18,8 @@ export type FormValues = {
   value: string | undefined;
   name: string;
   index: number;
-}
+};
+export type ErrorSchema = {
+  error: string;
+  name: string;
+};

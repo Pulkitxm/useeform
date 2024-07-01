@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
-import { FormSchema, FormValues } from "../types/form";
+import { ErrorSchema, FormSchema, FormValues } from "../types/form";
 import { Form } from "../components/Form";
 
 export default function useForm(initialState: FormSchema) {
   const [form, setForm] = useState<FormSchema>(initialState);
-  const [errors, setErrors] = useState<string[]>([]);
+  const [errors, setErrors] = useState<ErrorSchema[]>([]);
   const [formValues, setFormValues] = useState<FormValues[]>([]);
 
-  const addError = useCallback((error: string) => {
-    setErrors((prevErrors) => [...prevErrors, error]);
+  const addError = useCallback((error: string, name: string) => {
+    setErrors((prevErrors) => [...prevErrors, { error, name }]);
   }, []);
   const removeError = useCallback((index: number) => {
     setErrors((prevErrors) => [
@@ -22,7 +22,7 @@ export default function useForm(initialState: FormSchema) {
   const checkDuplicates = useCallback(
     (vals: FormSchema) => {
       if (!vals || !vals.children) return;
-      let haveDuplicateNames = false;
+      let duplicateName = null;
       vals.children
         .filter((child) => child.formElement === "input")
         .map((input) => input.name)
@@ -34,14 +34,14 @@ export default function useForm(initialState: FormSchema) {
             name
           ) => {
             if (acc[name]) {
-              haveDuplicateNames = true;
+              duplicateName = name;
             }
             return { ...acc, [name]: true };
           },
           {}
         );
-      if (haveDuplicateNames) {
-        addError("Form has duplicate names");
+      if (duplicateName) {
+        addError("Form has duplicate names",duplicateName);
       }
     },
     [addError]

@@ -18,7 +18,7 @@ export function Form({
 }: {
   form: FormSchema;
   setForm: React.Dispatch<React.SetStateAction<FormSchema>>;
-  addError: (error: string) => void;
+  addError: (error: string, name: string) => void;
 }): React.ReactElement<HTMLFormElement> {
   const handleFormSubmit = () =>
     preventDefault
