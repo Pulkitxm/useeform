@@ -25,7 +25,6 @@ export default function useForm(initialState: FormSchema) {
       if (!vals || !vals.children) return;
       let duplicateName = null;
       vals.children
-        .filter((child) => child.formElement === "input")
         .map((input) => input.name)
         .reduce(
           (
@@ -78,6 +77,11 @@ export default function useForm(initialState: FormSchema) {
     },
     [errors, form, formValues, validateFormZod]
   );
+  const clearForm = useCallback(() => {
+    setForm(initialState);
+    setErrors([]);
+    setFormValues([]);
+  }, [initialState]);
 
   useEffect(() => {
     if (!form || !form.children) return;
@@ -97,7 +101,8 @@ export default function useForm(initialState: FormSchema) {
     setForm,
     addError,
     setFormValues,
-    submiForm,
+    submiForm,  
+    clearForm,
   });
 
   return {
@@ -109,5 +114,6 @@ export default function useForm(initialState: FormSchema) {
     clearErrors,
     formUI,
     validateFormZod,
+    clearForm,
   };
 }

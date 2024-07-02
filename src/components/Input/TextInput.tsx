@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { FormValues } from "../../types/form";
 import { InputSchema } from "../../types/input";
 
@@ -29,25 +30,28 @@ export default function TextInput({
   addError: (error: string, name: string) => void;
   setFormValues: React.Dispatch<React.SetStateAction<FormValues[]>>;
 }) {
-  if (type !== "text") {
-    addError("TextInput only supports type: text", name);
-  }
-  if (max && min) {
-    addError(
-      "TextInput does not support " + max
-        ? minLength
-          ? "max and min"
-          : "max"
-        : "min",
-      name
-    );
-  }
-  if (value && maxLength && value.length > maxLength) {
-    addError("TextInput value is longer than maxLength", name);
-  }
-  if (value && minLength && value.length < minLength) {
-    addError("TextInput value is longer than maxLength", name);
-  }
+  useEffect(() => {
+    if (type !== "text") {
+      addError("TextInput only supports type: text", name);
+    }
+    if (max || min) {
+      addError(
+        "TextInput does not support " + max
+          ? min
+            ? "max and min"
+            : "max"
+          : "min",
+        name
+      );
+    }
+    if (value && maxLength && value.length > maxLength) {
+      addError("TextInput value is longer than maxLength", name);
+    }
+    if (value && minLength && value.length < minLength) {
+      addError("TextInput value is longer than maxLength", name);
+    }
+    // eslint-disable-next-line
+  }, []);
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues((prevValues) =>
       prevValues.map((value) =>

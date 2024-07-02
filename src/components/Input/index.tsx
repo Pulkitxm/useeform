@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { FormValues } from "../../types/form";
 import { InputSchema } from "../../types/input";
 import NumberInput from "./NumberInput";
@@ -10,10 +11,26 @@ export default function Input({
 }: {
   props: InputSchema;
   addError: (error: string, name: string) => void;
-  setFormValues: React.Dispatch<React.SetStateAction<FormValues[]>>
+  setFormValues: React.Dispatch<React.SetStateAction<FormValues[]>>;
 }): JSX.Element {
+  useEffect(() => {
+    if (!props.name) addError("Name is required", "name");
+  }, [props.name, props.placeholder, addError]);
   if (props.type === "text")
-    return <TextInput props={props} addError={addError} setFormValues={setFormValues} />;
-  else if (props.type === "number") return <NumberInput props={props} addError={addError} setFormValues={setFormValues} />;
+    return (
+      <TextInput
+        props={props}
+        addError={addError}
+        setFormValues={setFormValues}
+      />
+    );
+  else if (props.type === "number")
+    return (
+      <NumberInput
+        props={props}
+        addError={addError}
+        setFormValues={setFormValues}
+      />
+    );
   else return <input />;
 }

@@ -1,50 +1,70 @@
+import { useEffect } from "react";
+import { FormValues } from "../../types/form";
 import { InputSchema } from "../../types/input";
 
-export default function NumberInput({
-  type,
-  className,
-  autoFocus,
-  disabled,
-  maxLength,
-  minLength,
-  multiple,
-  pattern,
-  placeholder,
-  readOnly,
-  required,
-  value,
-  min,
-  max,
-  step,
-  checked,
-  onChange,
-}: InputSchema) {
-  if (type !== "text") {
-    console.error("TextInput only supports type: text");
-  }
-  if (typeof value !== "number") {
-    console.error("Value should be a number");
-  }
-  const numVal = Number(value);
-
-  if (maxLength && minLength) {
-    console.error(
-      "TextInput does not support " + maxLength
-        ? minLength
-          ? "maxLength and minLength"
-          : "maxLength"
-        : "minLength"
+export default function TextInput({
+  props: {
+    type,
+    className,
+    autoFocus,
+    disabled,
+    maxLength,
+    minLength,
+    multiple,
+    pattern,
+    placeholder,
+    readOnly,
+    required,
+    value,
+    min,
+    max,
+    step,
+    checked,
+    onChange,
+    name,
+  },
+  addError,
+  setFormValues,
+}: {
+  props: InputSchema;
+  addError: (error: string, name: string) => void;
+  setFormValues: React.Dispatch<React.SetStateAction<FormValues[]>>;
+}) {
+  useEffect(() => {
+    if (type !== "number") {
+      addError("NumberInput only supports type: number", name);
+    }
+    if (maxLength || minLength) {
+      addError(
+        "TextInput does not support " + maxLength
+          ? minLength
+            ? "maxLength and minLength"
+            : "maxLength"
+          : "minLength",
+        name
+      );
+    }
+    if (value && min && value.length > min) {
+      addError(`NumberInput value is less than ${min}`, name);
+    }
+    if (value && min && value.length > min) {
+      addError(`NumberInput value is less than ${min}`, name);
+    }
+    // eslint-disable-next-line
+  }, []);
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFormValues((prevValues) =>
+      prevValues.map((value) =>
+        value.name === name
+          ? { ...value, value: Number(event.target.value) }
+          : value
+      )
     );
-  }
-  if (min && numVal && numVal < min) {
-    console.error("Value should be greater than or equal to min value");
-  }
-  if (max && numVal && numVal > max) {
-    console.error("Value should be less than or equal to max value");
-  }
+    onChange && onChange(event);
+  };
   return (
     <input
-      type={type ? type : "text"}
+      type={"number"}
       className={className}
       autoFocus={autoFocus}
       disabled={disabled}
@@ -58,7 +78,7 @@ export default function NumberInput({
       max={max}
       step={step}
       checked={checked}
-      onChange={onChange}
+      onChange={handleOnChange}
     />
   );
 }
