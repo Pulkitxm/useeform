@@ -48,6 +48,25 @@ const Options: FormSchema = {
         "w-52 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
       placeholder: "Roll No.",
     },
+
+    {
+      formElement: "label",
+      name: "label-salary",
+      className: "text-gray-900",
+      value: (
+        <p className="block mb-2 text-sm font-medium text-gray-900">
+          Enter your salary
+        </p>
+      ),
+      children: {
+        formElement: "input",
+        type: "number",
+        name: "salary",
+        className:
+          "w-52 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
+        placeholder: "Label",
+      },
+    },
     {
       formElement: "button",
       type: "submit",
@@ -61,3 +80,14 @@ const Options: FormSchema = {
   ],
 };
 export default Options;
+
+{
+  /* <Label addError={addError} setFormValues={setFormValues}>
+  <p className="block mb-2 text-sm font-medium text-gray-900">Large input</p>
+  <input
+    type="text"
+    id="large-input"
+    className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 ="
+  />
+</Label>; */
+}

@@ -1,6 +1,7 @@
 import { FormSchema, FormValues } from "../types/form";
 import Button from "./Button";
 import Input from "./Input";
+import Label from "./Label";
 
 export function Form({
   form: { children, className, id, noValidate, autoComplete, name, ref, style },
@@ -41,6 +42,13 @@ export function Form({
             addError={addError}
             clearForm={clearForm}
             key={index}
+          />
+        ) : child.formElement === "label" ? (
+          <Label
+            key={index}
+            addError={addError}
+            setFormValues={setFormValues}
+            props={child}
           />
         ) : null
       )}

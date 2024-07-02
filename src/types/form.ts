@@ -3,6 +3,7 @@ import { className } from "./commons";
 import { InputSchema } from "./input";
 import { ZodError } from "zod";
 import { ButtonSchema } from "./button";
+import { LabelSchema } from "./label";
 
 export type FormSchema = {
   onSubmit?: (
@@ -19,7 +20,7 @@ export type FormSchema = {
   autoComplete?: "on" | "off";
   style?: React.CSSProperties;
   ref?: React.Ref<HTMLFormElement>;
-  children?: Array<InputSchema | ButtonSchema>;
+  children?: Array<InputSchema | ButtonSchema | LabelSchema>;
 };
 export type FormValues = {
   value: string | number | undefined;

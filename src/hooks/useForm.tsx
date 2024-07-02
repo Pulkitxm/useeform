@@ -24,22 +24,28 @@ export default function useForm(initialState: FormSchema) {
     (vals: FormSchema) => {
       if (!vals || !vals.children) return;
       let duplicateName = null;
-      vals.children
-        .map((input) => input.name)
-        .reduce(
-          (
-            acc: {
-              [key: string]: boolean;
-            },
-            name
-          ) => {
-            if (acc[name]) {
-              duplicateName = name;
-            }
-            return { ...acc, [name]: true };
+
+      const allVals: string[] = [];
+      vals.children.map((input) => {
+        if (input.formElement === "label" && input.children) {
+          allVals.push(input.children.name);
+          allVals.push(input.name);
+        } else allVals.push(input.name);
+      });
+      allVals.reduce(
+        (
+          acc: {
+            [key: string]: boolean;
           },
-          {}
-        );
+          name
+        ) => {
+          if (acc[name]) {
+            duplicateName = name;
+          }
+          return { ...acc, [name]: true };
+        },
+        {}
+      );
       if (duplicateName) {
         addError("Form has duplicate names", duplicateName);
       }
@@ -87,13 +93,29 @@ export default function useForm(initialState: FormSchema) {
     if (!form || !form.children) return;
     checkDuplicates({ ...form });
     const vals: FormValues[] = form.children
-      .filter((child) => child.formElement === "input")
-      .map((input, index) => ({
-        value: input.value,
-        name: input.name,
-        index: index,
-      }));
-    setFormValues(vals);
+      .filter(
+        (child) =>
+          child.formElement === "input" ||
+          (child.formElement === "label" && child.children)
+      )
+      .map((input, index) => {
+        if (input.formElement === "label") {
+          return {
+            value: input.children.value,
+            name: input.children.name,
+            index: index,
+          };
+        } else {
+          return {
+            value: input.value,
+            name: input.name,
+            index: index,
+          };
+        }
+      });
+    setFormValues(
+      vals.map((val) => (val.value == undefined ? { ...val, value: "" } : val))
+    );
   }, [checkDuplicates, form]);
 
   const formUI = Form({
@@ -101,7 +123,7 @@ export default function useForm(initialState: FormSchema) {
     setForm,
     addError,
     setFormValues,
-    submiForm,  
+    submiForm,
     clearForm,
   });
 
