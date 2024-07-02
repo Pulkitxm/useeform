@@ -8,7 +8,7 @@ import { LabelSchema } from "./label";
 export type FormSchema = {
   onSubmit?: (
     event: React.FormEvent<HTMLFormElement>,
-    formValues: FormValues[],
+    formValues: FormValues,
     errors: ErrorSchema[],
     zodErrors: ZodError[]
   ) => void;
@@ -23,9 +23,7 @@ export type FormSchema = {
   children?: Array<InputSchema | ButtonSchema | LabelSchema>;
 };
 export type FormValues = {
-  value: string | number | undefined;
-  name: string;
-  index: number;
+  [x: string]: string | number | undefined;
 };
 export type ErrorSchema = {
   error: string;

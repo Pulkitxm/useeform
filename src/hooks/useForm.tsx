@@ -6,7 +6,27 @@ import { ZodError } from "zod";
 export default function useForm(initialState: FormSchema) {
   const [form, setForm] = useState<FormSchema>(initialState);
   const [errors, setErrors] = useState<ErrorSchema[]>([]);
-  const [formValues, setFormValues] = useState<FormValues[]>([]);
+
+  const initialVals: FormValues = {};
+
+  form.children &&
+    form.children
+      .filter(
+        (child) =>
+          child.formElement === "input" ||
+          (child.formElement === "label" && child.children)
+      )
+      .map((input) => {
+        if (input.formElement === "label") {
+          initialVals[input.children.name] = input.children.value
+            ? input.children.value
+            : "";
+        } else {
+          initialVals[input.name] = input.value ? input.value : "";
+        }
+      });
+
+  const [formValues, setFormValues] = useState<FormValues>(initialVals);
 
   const addError = useCallback((error: string, name: string) => {
     setErrors((prevErrors) => [...prevErrors, { error, name }]);
@@ -60,9 +80,7 @@ export default function useForm(initialState: FormSchema) {
         if (input.formElement === "input") {
           if (input.zodValidation) {
             try {
-              input.zodValidation.parse(
-                formValues.find((v) => v.name === input.name)?.value
-              );
+              input.zodValidation.parse(formValues[input.name]);
             } catch (error) {
               if (error instanceof ZodError) zodErrors.push(error);
             }
@@ -86,36 +104,30 @@ export default function useForm(initialState: FormSchema) {
   const clearForm = useCallback(() => {
     setForm(initialState);
     setErrors([]);
-    setFormValues([]);
+    setFormValues({});
   }, [initialState]);
 
   useEffect(() => {
     if (!form || !form.children) return;
     checkDuplicates({ ...form });
-    const vals: FormValues[] = form.children
+    const vals: FormValues = {};
+    form.children
       .filter(
         (child) =>
           child.formElement === "input" ||
           (child.formElement === "label" && child.children)
       )
-      .map((input, index) => {
+      .map((input) => {
         if (input.formElement === "label") {
-          return {
-            value: input.children.value,
-            name: input.children.name,
-            index: index,
-          };
+          vals[input.children.name] = input.children.value;
         } else {
-          return {
-            value: input.value,
-            name: input.name,
-            index: index,
-          };
+          vals[input.name] = input.value;
         }
       });
-    setFormValues(
-      vals.map((val) => (val.value == undefined ? { ...val, value: "" } : val))
-    );
+    Object.keys(vals).forEach((key) => {
+      vals[key] = vals[key] || "";
+    });
+    setFormValues(vals);
   }, [checkDuplicates, form]);
 
   const formUI = Form({
@@ -125,11 +137,11 @@ export default function useForm(initialState: FormSchema) {
     setFormValues,
     submiForm,
     clearForm,
+    formValues,
   });
 
   return {
-    form,
-    formValues,
+    formState: [formValues, setFormValues],
     errors,
     addError,
     removeError,

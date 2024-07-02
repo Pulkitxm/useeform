@@ -26,15 +26,14 @@ export default function TextInput({
   },
   addError,
   setFormValues,
+  formValues,
 }: {
   props: InputSchema;
   addError: (error: string, name: string) => void;
-  setFormValues: React.Dispatch<React.SetStateAction<FormValues[]>>;
+  setFormValues: React.Dispatch<React.SetStateAction<FormValues>>;
+  formValues: FormValues;
 }) {
   useEffect(() => {
-    if (type !== "text") {
-      addError("TextInput only supports type: text", name);
-    }
     if (max || min) {
       addError(
         "TextInput does not support " + max
@@ -54,11 +53,11 @@ export default function TextInput({
     // eslint-disable-next-line
   }, []);
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValues((prevValues) =>
-      prevValues.map((value) =>
-        value.name === name ? { ...value, value: event.target.value } : value
-      )
-    );
+    setFormValues((prevValues) => {
+      const newValues = { ...prevValues };
+      newValues[name] = event.target.value;
+      return newValues;
+    });
     onChange && onChange(event);
   };
   return (
@@ -72,7 +71,7 @@ export default function TextInput({
       placeholder={placeholder}
       readOnly={readOnly}
       required={required}
-      value={value}
+      value={formValues[name]}
       min={min}
       max={max}
       step={step}

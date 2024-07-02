@@ -25,10 +25,12 @@ export default function TextInput({
   },
   addError,
   setFormValues,
+  formValues,
 }: {
   props: InputSchema;
   addError: (error: string, name: string) => void;
-  setFormValues: React.Dispatch<React.SetStateAction<FormValues[]>>;
+  setFormValues: React.Dispatch<React.SetStateAction<FormValues>>;
+  formValues: FormValues;
 }) {
   useEffect(() => {
     if (type !== "number") {
@@ -53,13 +55,17 @@ export default function TextInput({
     // eslint-disable-next-line
   }, []);
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValues((prevValues) =>
-      prevValues.map((value) =>
-        value.name === name
-          ? { ...value, value: Number(event.target.value) }
-          : value
-      )
-    );
+    setFormValues((prevValues) => {
+      console.log("prevValues", prevValues);
+      console.log({
+        ...prevValues,
+        [name]: Number(event.target.value),
+      });
+      return {
+        ...prevValues,
+        // [name]: Number(event.target.value),
+      };
+    });
     onChange && onChange(event);
   };
   return (
@@ -73,7 +79,7 @@ export default function TextInput({
       placeholder={placeholder}
       readOnly={readOnly}
       required={required}
-      value={value}
+      value={formValues[name] ? formValues[name] : value}
       min={min}
       max={max}
       step={step}

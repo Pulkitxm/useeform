@@ -1,10 +1,34 @@
+import { z } from "zod";
 import { FormSchema } from "./types/form";
+
+const formSchemaZod = {
+  username: z.string().min(3).max(20),
+  email: z.string().email(),
+  password: z
+    .string()
+    .min(6)
+    .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/),
+};
 
 const Options: FormSchema = {
   name: "test",
   className:
     "inline-flex flex-col justify-center items-center space-y-4 w-full bg-transparent w-full",
   preventDefault: true,
+  onSubmit: (_, values, errors, zodErrors) => {
+    console.log({
+      values,
+      errors,
+      zodErrors,
+    });
+    if (errors.length) return console.log("Form has errors", errors);
+    if (zodErrors.length)
+      return console.log(
+        "Form has Zod errors",
+        zodErrors.map((error) => error.issues)
+      );
+    console.log("Form submitted", values);
+  },
   children: [
     {
       formElement: "label",
@@ -17,6 +41,7 @@ const Options: FormSchema = {
         name: "username",
         className:
           "mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300 w-full",
+        zodValidation: formSchemaZod.username,
       },
     },
     {
@@ -30,6 +55,7 @@ const Options: FormSchema = {
         name: "email",
         className:
           "mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300 w-full",
+        zodValidation: formSchemaZod.email,
       },
     },
     {
@@ -43,6 +69,7 @@ const Options: FormSchema = {
         name: "password",
         className:
           "mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300 w-full",
+        zodValidation: formSchemaZod.password,
       },
     },
     {

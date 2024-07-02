@@ -9,13 +9,15 @@ export function Form({
   setFormValues,
   submiForm,
   clearForm,
+  formValues,
 }: {
   form: FormSchema;
   setForm: React.Dispatch<React.SetStateAction<FormSchema>>;
   addError: (error: string, name: string) => void;
-  setFormValues: React.Dispatch<React.SetStateAction<FormValues[]>>;
+  setFormValues: React.Dispatch<React.SetStateAction<FormValues>>;
   clearForm: () => void;
   submiForm: (event: React.FormEvent<HTMLFormElement>) => void;
+  formValues: FormValues;
 }): React.ReactElement<HTMLFormElement> {
   return (
     <form
@@ -35,6 +37,7 @@ export function Form({
             props={child}
             addError={addError}
             setFormValues={setFormValues}
+            formValues={formValues}
           />
         ) : child.formElement === "button" ? (
           <Button
@@ -49,6 +52,7 @@ export function Form({
             addError={addError}
             setFormValues={setFormValues}
             props={child}
+            formValues={formValues}
           />
         ) : null
       )}

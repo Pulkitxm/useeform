@@ -8,10 +8,12 @@ export default function Input({
   props,
   addError,
   setFormValues,
+  formValues,
 }: {
   props: InputSchema;
   addError: (error: string, name: string) => void;
-  setFormValues: React.Dispatch<React.SetStateAction<FormValues[]>>;
+  setFormValues: React.Dispatch<React.SetStateAction<FormValues>>;
+  formValues: FormValues;
 }): JSX.Element {
   useEffect(() => {
     if (!props.name) addError("Name is required", "name");
@@ -22,6 +24,7 @@ export default function Input({
         props={props}
         addError={addError}
         setFormValues={setFormValues}
+        formValues={formValues}
       />
     );
   else
@@ -30,6 +33,7 @@ export default function Input({
         props={props}
         addError={addError}
         setFormValues={setFormValues}
+        formValues={formValues}
       />
     );
 }
