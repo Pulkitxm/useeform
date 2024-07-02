@@ -1,4 +1,5 @@
 import { HTMLInputTypeAttribute } from "react";
+import { z } from "zod";
 
 export type InputSchema = {
   formElement: "input";
@@ -20,4 +21,5 @@ export type InputSchema = {
   maxLength?: number;
   minLength?: number;
   name: string;
+  zodValidation?: z.ZodType;
 };

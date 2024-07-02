@@ -1,3 +1,4 @@
+import { FormValues } from "../../types/form";
 import { InputSchema } from "../../types/input";
 
 export default function TextInput({
@@ -22,9 +23,11 @@ export default function TextInput({
     name,
   },
   addError,
+  setFormValues,
 }: {
   props: InputSchema;
   addError: (error: string, name: string) => void;
+  setFormValues: React.Dispatch<React.SetStateAction<FormValues[]>>;
 }) {
   if (type !== "text") {
     addError("TextInput only supports type: text", name);
@@ -45,6 +48,14 @@ export default function TextInput({
   if (value && minLength && value.length < minLength) {
     addError("TextInput value is longer than maxLength", name);
   }
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFormValues((prevValues) =>
+      prevValues.map((value) =>
+        value.name === name ? { ...value, value: event.target.value } : value
+      )
+    );
+    onChange && onChange(event);
+  };
   return (
     <input
       type={type ? type : "text"}
@@ -61,7 +72,7 @@ export default function TextInput({
       max={max}
       step={step}
       checked={checked}
-      onChange={onChange}
+      onChange={handleOnChange}
     />
   );
 }

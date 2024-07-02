@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { ErrorSchema, FormSchema, FormValues } from "../types/form";
 import { Form } from "../components/Form";
+import { ZodError } from "zod";
 
 export default function useForm(initialState: FormSchema) {
   const [form, setForm] = useState<FormSchema>(initialState);
@@ -41,10 +42,41 @@ export default function useForm(initialState: FormSchema) {
           {}
         );
       if (duplicateName) {
-        addError("Form has duplicate names",duplicateName);
+        addError("Form has duplicate names", duplicateName);
       }
     },
     [addError]
+  );
+
+  const validateFormZod = useCallback((): ZodError[] => {
+    const zodErrors: ZodError[] = [];
+    if (form && form.children) {
+      for (const input of form.children) {
+        if (input.formElement === "input") {
+          if (input.zodValidation) {
+            try {
+              input.zodValidation.parse(
+                formValues.find((v) => v.name === input.name)?.value
+              );
+            } catch (error) {
+              if (error instanceof ZodError) zodErrors.push(error);
+            }
+          }
+        }
+      }
+    }
+    return zodErrors;
+  }, [form, formValues]);
+
+  const submiForm = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      form && form.preventDefault && event.preventDefault();
+      const zodErrors: ZodError[] = validateFormZod();
+      form &&
+        form.onSubmit &&
+        form.onSubmit(event, formValues, errors, zodErrors);
+    },
+    [errors, form, formValues, validateFormZod]
   );
 
   useEffect(() => {
@@ -64,6 +96,8 @@ export default function useForm(initialState: FormSchema) {
     form,
     setForm,
     addError,
+    setFormValues,
+    submiForm,
   });
 
   return {
@@ -74,5 +108,6 @@ export default function useForm(initialState: FormSchema) {
     removeError,
     clearErrors,
     formUI,
+    validateFormZod,
   };
 }

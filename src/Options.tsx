@@ -1,23 +1,41 @@
+import { z } from "zod";
 import { FormSchema } from "./types/form";
 
-const Options:FormSchema = {
+const formSchemaZodValidation = {
+  name: z.string().max(3),
+};
+
+const Options: FormSchema = {
   name: "test",
-  className: "flex flex-col justify-center items-center h-screen",
+  className: "flex flex-col justify-center items-center h-screen space-y-4",
+  preventDefault: true,
+  onSubmit: (_, values, errors, zodErrors) => {
+    if (errors.length) return console.log("Form has errors", errors);
+    if (zodErrors.length)
+      return console.log(
+        "Form has Zod errors",
+        zodErrors.map((error) => error.issues)
+      );
+    console.log("Form submitted", values);
+  },
   children: [
     {
       formElement: "input",
-      name: "username",
-      className:"border-2 my-2 p-3 rounded-xl border-black",
       type: "text",
+      name: "username",
+      className:
+        "w-52 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
       placeholder: "Name",
+      zodValidation: formSchemaZodValidation.name,
     },
     {
       formElement: "input",
-      name: "username",
-      className:"border-2 my-2 p-3 rounded-xl border-black",
-      type: "text",
-      placeholder: "Name",
-    }
+      type: "number",
+      name: "name",
+      className:
+        "w-52 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
+      placeholder: "Number",
+    },
   ],
 };
 export default Options;

@@ -1,9 +1,15 @@
 import React from "react";
 import { className } from "./commons";
 import { InputSchema } from "./input";
+import { ZodError } from "zod";
 
 export type FormSchema = {
-  onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit?: (
+    event: React.FormEvent<HTMLFormElement>,
+    formValues: FormValues[],
+    errors: ErrorSchema[],
+    zodErrors: ZodError[]
+  ) => void;
   preventDefault?: boolean;
   className?: className;
   id?: string;
