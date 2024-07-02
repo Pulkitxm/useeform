@@ -16,15 +16,7 @@ export default function Input({
   useEffect(() => {
     if (!props.name) addError("Name is required", "name");
   }, [props.name, props.placeholder, addError]);
-  if (props.type === "text")
-    return (
-      <TextInput
-        props={props}
-        addError={addError}
-        setFormValues={setFormValues}
-      />
-    );
-  else if (props.type === "number")
+  if (props.type === "number")
     return (
       <NumberInput
         props={props}
@@ -32,5 +24,12 @@ export default function Input({
         setFormValues={setFormValues}
       />
     );
-  else return <input />;
+  else
+    return (
+      <TextInput
+        props={props}
+        addError={addError}
+        setFormValues={setFormValues}
+      />
+    );
 }

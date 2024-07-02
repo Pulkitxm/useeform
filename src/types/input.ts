@@ -18,6 +18,7 @@ export type InputSchema = {
   autoFocus?: boolean;
   multiple?: boolean;
   checked?: boolean;
+  defaultChecked?: boolean;
   maxLength?: number;
   minLength?: number;
   name: string;

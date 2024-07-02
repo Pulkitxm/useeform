@@ -20,6 +20,7 @@ export default function TextInput({
     max,
     step,
     checked,
+    defaultChecked,
     onChange,
     name,
   },
@@ -76,6 +77,7 @@ export default function TextInput({
       max={max}
       step={step}
       checked={checked}
+      defaultChecked={defaultChecked}
       onChange={handleOnChange}
     />
   );
