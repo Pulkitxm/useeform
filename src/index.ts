@@ -1,4 +1,4 @@
-export { default as useForm } from "useeform";
+export { default } from "./hooks/useForm";
 
 export { ErrorSchema, FormSchema, FormValues } from "./types/form";
 export { InputSchema } from "./types/input";

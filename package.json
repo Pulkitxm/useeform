@@ -1,6 +1,6 @@
 {
   "name": "useeform",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "private": false,
   "description": "useeform is a custom React hook designed to simplify form handling in React applications. It provides an easy way to manage form state, handle form submissions, and validate form data. This hook is built to be flexible and can be integrated into any form structure you're working with.",
   "main": "dist/cjs/index.js",
@@ -9,7 +9,8 @@
   ],
   "types": "dist/index.d.ts",
   "scripts": {
-    "rollup": "rollup -c --bundleConfigAsCjs"
+    "rollup": "rollup -c --bundleConfigAsCjs",
+    "upload": "npm run rollup && npm publish"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^26.0.1",

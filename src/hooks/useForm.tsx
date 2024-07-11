@@ -86,6 +86,16 @@ export default function useForm(initialState: FormSchema) {
               if (error instanceof ZodError) zodErrors.push(error);
             }
           }
+        } else if (input.formElement === "label" && input.children) {
+          if (input.children.zodValidation) {
+            try {
+              input.children.zodValidation.parse(
+                formValues[input.children.name]
+              );
+            } catch (error) {
+              if (error instanceof ZodError) zodErrors.push(error);
+            }
+          }
         }
       }
     }
