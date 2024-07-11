@@ -2,7 +2,17 @@ import React, { useEffect } from "react";
 import { ButtonSchema } from "../types/button";
 
 export default function Button({
-  props: { type, className, name, value, autoFocus, disabled, formElement },
+  props: {
+    type,
+    className,
+    name,
+    value,
+    autoFocus,
+    disabled,
+    formElement,
+    loading,
+    loadingComponent,
+  },
   addError,
   clearForm,
 }: {
@@ -24,7 +34,7 @@ export default function Button({
       disabled={disabled}
       onClick={type === "reset" ? clearForm : undefined}
     >
-      {value}
+      {loading ? (loadingComponent ? loadingComponent : "Loading...") : value}
     </button>
   );
 }

@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 
 export type ButtonSchema = {
   formElement: "button";
@@ -8,4 +8,6 @@ export type ButtonSchema = {
   value?: string;
   autoFocus?: boolean;
   disabled?: boolean;
+  loading?: boolean;
+  loadingComponent?: string | ReactNode;
 };

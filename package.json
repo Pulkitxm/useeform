@@ -1,6 +1,6 @@
 {
   "name": "useeform",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "private": false,
   "description": "useeform is a custom React hook designed to simplify form handling in React applications. It provides an easy way to manage form state, handle form submissions, and validate form data. This hook is built to be flexible and can be integrated into any form structure you're working with.",
   "main": "dist/cjs/index.js",
@@ -48,5 +48,8 @@
     "url": "https://github.com/Pulkitxm/useeform/issues"
   },
   "homepage": "https://github.com/Pulkitxm/useeform#readme",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "zod": "^3.23.8"
+  }
 }
